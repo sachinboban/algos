@@ -27,9 +27,9 @@ int main()
 	int index, size = 0;
 	
 	scanf("%d", &size);
-
+	
 	array = malloc(sizeof(int) * size);
-	if(array) {
+	if(!array) {
 		printf("ERROR: malloc()\n");
 		return 0;
 	}
@@ -53,14 +53,17 @@ int insertion_sort(int *array, int size)
 	int index, swap_position, swap_data;
 	for(index = 1; index < size; index++) {
 		if (array[index] < array[index - 1]) {
-			swap_position = index - 1;
+			swap_position = index;
 			swap_data = array[index];
 			
-			while(swap_position >= 0 && swap_data < array[swap_position]) {
-				array[swap_position + 1] = array[swap_position];
+			while(swap_position >= 0 && swap_data < array[swap_position - 1]) {
+				array[swap_position] = array[swap_position -1];
 				swap_position -= 1;
 			}
-			array[swap_position] = swap_data;
+			if( swap_position < 0)
+				array[0] = swap_data;
+			else
+				array[swap_position] = swap_data;
 		}
 	}
 
