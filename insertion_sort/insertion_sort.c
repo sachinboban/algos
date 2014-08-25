@@ -5,6 +5,7 @@
 
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 
 /*
  * Documentation
@@ -52,11 +53,11 @@ int insertion_sort(int *array, int size)
 	int index, swap_position, swap_data;
 	for(index = 1; index < size; index++) {
 		if (array[index] < array[index - 1]) {
-			swap_postion = index - 1;
+			swap_position = index - 1;
 			swap_data = array[index];
 			
 			while(swap_position >= 0 && swap_data < array[swap_position]) {
-				array[swap_posion + 1] = array[swap_position];
+				array[swap_position + 1] = array[swap_position];
 				swap_position -= 1;
 			}
 			array[swap_position] = swap_data;
