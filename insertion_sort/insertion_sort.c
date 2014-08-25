@@ -1,69 +1,67 @@
-#include <stdio.h>
-#include <stdlib.h>
+/*
+ * Insertion sort
+ * Suitable to run for a small number of elements
+ */
 
-int get_smallest_index(int *array, int size, int start_index);
-void swap(int *a, int *b);
-void insertion_sort(int *array, int size);
+#include<stdio.h>
+#include<stdlib.h>
+
+/*
+ * Documentation
+ * ----------------------------------------------------------------------------
+ * Input: A[1...n]
+ * 
+ * Working: At any iteration i, A[1...i-1] are sorted. Find the relative 
+ * position of A[i] wrt to the sorted array A[1...i-1]. Perform any right shift
+ * if required.
+ *
+ * Complexity: O(n^2) [worst case]
+ */
+int insertion_sort(int *array, int size);
 
 int main()
 {
-	int index, data, size, *array;
-	array = NULL;
 
-	printf("Array size?\n");
+	int *array = NULL;
+	int index, size = 0;
+	
 	scanf("%d", &size);
 
-	array = (int *) malloc(sizeof(int) * size);
-	if(!array) {
-		printf("Memory error\n");
+	array = malloc(sizeof(int) * size);
+	if(array) {
+		printf("ERROR: malloc()\n");
 		return 0;
 	}
-
-	printf("Enter array\n");
-	for(index = 0; index < size; ++index)
+	memset(array, 0, sizeof(int) * size);
+	
+	for(index = 0; index < size; index++) {
 		scanf("%d", &array[index]);
-	
+	}
+
 	insertion_sort(array, size);
-	
-	printf("Sorted array: ");
-	for(index = 0; index < size; ++index)
+	for(index = 0; index < size; index++) {
 		printf("%d ", array[index]);
-	
+	}
+
 	free(array);
 	return 0;
 }
 
-int get_smallest_index(int *array, int size, int start_index)
+int insertion_sort(int *array, int size)
 {
-	int small = start_index;
-
-	if(small == size)
-		return small;
-
-	start_index += 1;
-
-	for(; start_index < size; start_index++) {
-		if(array[small] > array[start_index])
-			small = start_index;
+	int index, swap_position, swap_data;
+	for(index = 1; index < size; index++) {
+		if (array[index] < array[index - 1]) {
+			swap_postion = index - 1;
+			swap_data = array[index];
+			
+			while(swap_position >= 0 && swap_data < array[swap_position]) {
+				array[swap_posion + 1] = array[swap_position];
+				swap_position -= 1;
+			}
+			array[swap_position] = swap_data;
+		}
 	}
 
-	return small;
-}
-
-void swap(int *a, int *b)
-{
-	int temp = *a;
-	*a  = *b;
-	*b = temp;
-}
-
-void insertion_sort(int *array, int size)
-{
-	int current_index, temp_small_index;
-
-	for(current_index = 0; current_index < size - 1; ++current_index) {
-		temp_small_index = get_smallest_index(array, size, current_index + 1);
-		if(array[current_index] > array[temp_small_index])
-			swap(&array[current_index], &array[temp_small_index]);
-	}
+	return 0;
 }
