@@ -59,13 +59,13 @@ int max_sub_array(int *array, int size, int mode)
 
 	if(mode == ALGO_TYPE_LINEAR)
 		max_subarray = max_sub_array_brute(array, size);
-	/*else
-		max_subarray = max_sub_array_recursive(array, 0, size - 1);*/
+	else
+		max_subarray = max_sub_array_recursive(array, 0, size - 1);
 
-	printf("max sub-array: array[%d....%d], sum[%d]", max_subarray.start_idx,
+	printf("max sub-array: array[%d....%d], sum[%d], subarry = ", max_subarray.start_idx,
 			max_subarray.end_idx, max_subarray.sum);
 	for(index = max_subarray.start_idx; index <= max_subarray.end_idx; index++)
-		printf("%d", array[index]);
+		printf("%d, ", array[index]);
 
 	return 0;
 }
@@ -139,4 +139,42 @@ subarray_t max_cross_sub_array(int* array, int start_idx, int mid_idx, int end_i
 	}
 
 	return cross_sub_array;
+}
+
+subarray_t max_sub_array_recursive(int* array, int start_idx, int end_idx)
+{
+	subarray_t max_subarray_left, max_subarray_right, max_subarray_cross,
+				max_subarray = {array, -1, -1, INT_MIN};
+	int mid_idx;
+
+	if(!array) {
+		printf("ERROR: No Array specified\n");
+		return max_subarray;
+	}
+
+	if(start_idx == end_idx) {
+		max_subarray.start_idx = start_idx;
+		max_subarray.end_idx = end_idx;
+		max_subarray.sum = array[start_idx];
+		return max_subarray;
+	}
+
+	mid_idx = (start_idx + end_idx)/2;
+	max_subarray_left = max_sub_array_recursive(array, start_idx, mid_idx);
+	max_subarray_right = max_sub_array_recursive(array, mid_idx + 1, end_idx);
+	max_subarray_cross = max_cross_sub_array(array, start_idx, mid_idx, end_idx);
+
+	if(max_subarray_left.sum > max_subarray_cross.sum) {
+		if(max_subarray_left.sum > max_subarray_right.sum)
+			max_subarray = max_subarray_left;
+		else
+			max_subarray = max_subarray_right;
+	} else {
+		if(max_subarray_cross.sum > max_subarray_right.sum)
+			max_subarray = max_subarray_cross;
+		else
+			max_subarray = max_subarray_right;
+	}
+
+	return max_subarray;
 }
