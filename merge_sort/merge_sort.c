@@ -1,5 +1,6 @@
 #include<stdlib.h>
 #include<stdio.h>
+#include<string.h>
 
 int merge_sort(int *array, int start_idx, int end_idx);
 
@@ -71,6 +72,7 @@ int merge_sort(int *array, int start_idx, int end_idx)
 		printf("[%s][ERROR] malloc()\n", __FUNCTION__);
 		return -1;
 	}
+	memset(temp_array, 0, sizeof(int) * size);
 
 	index1 = start_idx;
 	index2 = mid_idx + 1;
@@ -90,7 +92,7 @@ int merge_sort(int *array, int start_idx, int end_idx)
 			index2 += 1;
 
 			if(index2 > end_idx)
-				index2 = -2;
+				index2 = -1;
 		}
 	}
 
