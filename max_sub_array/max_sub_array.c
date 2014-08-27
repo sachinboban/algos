@@ -15,7 +15,7 @@ struct struct_sub_array {
 typedef struct struct_sub_array subarray_t;
 
 subarray_t max_sub_array_brute(int *array, int size);
-subarray_t max_cross_sub_array(int* array, int start_idx, int end_idx);
+subarray_t max_cross_sub_array(int* array, int start_idx, int mid_idx, int end_idx);
 subarray_t max_sub_array_recursive(int* array, int start_idx, int end_idx);
 int max_sub_array(int *array, int size, int mode);
 
@@ -62,7 +62,7 @@ int max_sub_array(int *array, int size, int mode)
 	/*else
 		max_subarray = max_sub_array_recursive(array, 0, size - 1);*/
 
-	printf("max sub-array: array[%d....%d, sum[%d]", max_subarray.start_idx,
+	printf("max sub-array: array[%d....%d], sum[%d]", max_subarray.start_idx,
 			max_subarray.end_idx, max_subarray.sum);
 	for(index = max_subarray.start_idx; index <= max_subarray.end_idx; index++)
 		printf("%d", array[index]);
@@ -103,4 +103,40 @@ subarray_t max_sub_array_brute(int* array, int size)
 	}
 
 	return max_subarray;
+}
+
+subarray_t max_cross_sub_array(int* array, int start_idx, int mid_idx, int end_idx)
+{
+	subarray_t cross_sub_array = {array, -1, -1, INT_MIN};
+	int index;
+	int sum = 0;
+
+	if(!array) {
+		printf("ERROR: No Array specified\n");
+		return cross_sub_array;
+	}
+
+	index = mid_idx;
+	while(index >=0) {
+		sum += array[index];
+		if(sum > cross_sub_array.sum) {
+			cross_sub_array.sum = sum;
+			cross_sub_array.start_idx = index;
+		}
+		index -= 1;
+	}
+
+	index = mid_idx + 1;
+	sum = cross_sub_array.sum;
+	cross_sub_array.end_idx = mid_idx;
+	while(index <= end_idx) {
+		sum += array[index];
+		if(sum > cross_sub_array.sum) {
+			cross_sub_array.sum =sum;
+			cross_sub_array.end_idx = index;
+		}
+		index += 1;
+	}
+
+	return cross_sub_array;
 }
