@@ -8,7 +8,7 @@
 #include<string.h>
 
 /*
- * Documentation
+ * Solution
  * ----------------------------------------------------------------------------
  * Input: A[1...n]
  * 
@@ -17,6 +17,17 @@
  * if required.
  *
  * Complexity: O(n^2) [worst case]
+ */
+
+/*
+ * insertion_sort
+ * @array		array of elements to be sorted
+ * @size		size of the array to be sorted
+ *
+ * Sorts the array using insertion sort. At any iteration i, A[0...i-1] is
+ * is sorted. We compare A[i] with A[i-1,..,0] in that order. Till we find the
+ * the position of A[i] we right shift the elements of A[0...i-1], and once the
+ * position is found, we insert A[i] there.
  */
 int insertion_sort(int *array, int size);
 
@@ -53,9 +64,16 @@ int insertion_sort(int *array, int size)
 	int index, swap_position, swap_data;
 	for(index = 1; index < size; index++) {
 		if (array[index] < array[index - 1]) {
+			/* swap_position is the possible postion for inserting array[index]
+			 */
 			swap_position = index;
+			/* swap_data contains the element that needs to be inserted into
+			 * relative position.
+			 */
 			swap_data = array[index];
 			
+			/* find the suitable postion to insert the element in question, at
+			 * same time create the a to insert the element in question. */
 			while(swap_position >= 0 && swap_data < array[swap_position - 1]) {
 				array[swap_position] = array[swap_position -1];
 				swap_position -= 1;

@@ -6,6 +6,16 @@
 #define ALGO_TYPE_LINEAR 0
 #define ALGO_TYPE_RECURSIVE 1
 
+/*
+ * struct_sub_array
+ * @array		array pointer
+ * @start_idx	starting index of the maximum sub-array
+ * @end_idx		ending index of the maximum sub-array
+ * @sum			sum of the maximum sub-array
+ *
+ * structure to represent the maximum sub-array, given by
+ * array[start_idx...end_idx]. It is typecasted as subarray_t.
+ */
 struct struct_sub_array {
 	int* array;
 	int start_idx;
@@ -14,9 +24,61 @@ struct struct_sub_array {
 };
 typedef struct struct_sub_array subarray_t;
 
+/*
+ * max_sub_array_brute
+ * @array
+ * @size		size of the array
+ *
+ * find the maximum sub-array of the given array using brute-force approach.
+ * Considers all the possible sub-arrays of the given array, and find the
+ * maximum.
+ * T(n) = O(n*n)
+ */
 subarray_t max_sub_array_brute(int *array, int size);
-subarray_t max_cross_sub_array(int* array, int start_idx, int mid_idx, int end_idx);
+
+/*
+ * max_cross_sub_array
+ * array
+ * start_idx		start index
+ * mid_idx			middle index
+ * end_idx			end index
+ *
+ * Find the maximum sub-array of array[start_idx...end_index] which includes
+ * array[mid_idx].
+ * T(n) = O(n)
+ */
+subarray_t max_cross_sub_array(int* array, int start_idx, int mid_idx,
+								int end_idx);
+
+/*
+ * max_sub_array_recursive
+ * @array
+ * @start_idx		start index
+ * @end_idx			end index
+ *
+ * Finds the maximum sub-array of array[start_idx...end_idx].
+ * Split the array into two array[start_idx...mid_idx] and array[mid_idx+1...
+ * end_idx]. The maximum subarray can be three ways. It can be completely within
+ * the left sub-array, or completely within the right sub-array or can span
+ * across both left and right sub-array, i.e. max sub-array incudes
+ * array[mid_idx]. The first two cases are solved recursively, while the third
+ * case is solved using max_cross_sub_array(). The three solutions are then
+ * compared to find the max sub-array.
+ * T(n) = 2T(n/2) + O(n); T(n) = theta(nlogn)
+ */
 subarray_t max_sub_array_recursive(int* array, int start_idx, int end_idx);
+
+/*
+ * max_sub_array
+ * @array		array
+ * @size		size of the array
+ * @mode		approach in which the solution must be found. brute-force(0) or
+ *				recursive(1)
+ *
+ * wrapper function for finding the maximum subarray for the given array.
+ * Depending on the mode specified ALGO_TYPE_LINEAR or ALGO_TYPE_RECURSIVE, it
+ * calls max_sub_array_brute() or max_sub_array_recursive() respectively.
+ */
 int max_sub_array(int *array, int size, int mode);
 
 int main()
@@ -62,8 +124,8 @@ int max_sub_array(int *array, int size, int mode)
 	else
 		max_subarray = max_sub_array_recursive(array, 0, size - 1);
 
-	printf("max sub-array: array[%d....%d], sum[%d], subarry = ", max_subarray.start_idx,
-			max_subarray.end_idx, max_subarray.sum);
+	printf("max sub-array: array[%d....%d], sum[%d], subarry = ",
+			max_subarray.start_idx,	max_subarray.end_idx, max_subarray.sum);
 	for(index = max_subarray.start_idx; index <= max_subarray.end_idx; index++)
 		printf("%d, ", array[index]);
 
@@ -105,7 +167,8 @@ subarray_t max_sub_array_brute(int* array, int size)
 	return max_subarray;
 }
 
-subarray_t max_cross_sub_array(int* array, int start_idx, int mid_idx, int end_idx)
+subarray_t max_cross_sub_array(int* array, int start_idx, int mid_idx,
+								int end_idx)
 {
 	subarray_t cross_sub_array = {array, -1, -1, INT_MIN};
 	int index;

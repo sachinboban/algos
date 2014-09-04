@@ -2,6 +2,17 @@
 #include<stdio.h>
 #include<string.h>
 
+/*
+ * merge_sort
+ * @array			array to sort
+ * @start_idx		starting index
+ * @end_idx			ending index
+ *
+ * sort array[start_idx...end_idx] using merge sort.
+ * Splits the array into array[start_idx...mid_idx] and array[mid_idx+1...
+ * end_idx]. Sort the two sub-arrays recursively and merge them.
+ * T(n) = 2T(n/2) + O(1); T(n) = theta(nlogn)
+ */
 int merge_sort(int *array, int start_idx, int end_idx);
 
 int main()
@@ -108,7 +119,8 @@ int merge_sort(int *array, int start_idx, int end_idx)
 		index1 += 1;
 	}
 
-	for(index1 = start_idx, index = 0; index1 <= end_idx; index1 += 1, index += 1)
+	for(index1 = start_idx, index = 0; index1 <= end_idx; index1 += 1,
+		index += 1)
 		array[index1] =temp_array[index];
 
 	free(temp_array);
